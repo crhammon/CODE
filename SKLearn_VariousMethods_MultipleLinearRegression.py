@@ -163,10 +163,4 @@ print("Bed volumes to breakthrough for METSORB: " +str(np.around(np.exp(BV10_m_M
 # ## Stochastic Gradient Descent
 # #---------------------------------------------------------------
 
-# SGD = SGDRegressor(loss="huber", penalty="l2", max_iter=500000)
-# SGD.fit(X,BV10)
-# #print("For Stochastic Gradient Descent: ")
-# Predictions_SGD = SGD.predict(X)
-# #print(Predictions_lasso)
-# #error_stats(BV10, Predictions_SGD)
 
