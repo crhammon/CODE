@@ -5,6 +5,7 @@ import sklearn.metrics as metrics
 import math as m
 import statsmodels
 from regression_results import error_stats
+from prettytable import PrettyTable
 
 #---------------------------------------------------------------
 ## Nguyen DATA
@@ -163,7 +164,16 @@ Time_to_repl_E33_c = np.around(BV10_m_c/BV_Treated_E33,2)
 Time_to_repl_MET = np.around(BV10_m/BV_Treated_MET,2) # Time to replacement for media, years
 Time_to_repl_MET_c = np.around(BV10_m_c/BV_Treated_MET,2)
 
-from prettytable import PrettyTable
+Cost_per_year_GFH = np.around(BV_GFH*Cost_GFH/Time_to_repl_GFH) # $/year
+Cost_per_year_GFH_c = np.around(BV_GFH*Cost_GFH/Time_to_repl_GFH_c) # $/year
+
+Cost_per_year_E33 = np.around(BV_E33*Cost_E33/Time_to_repl_E33) # $/year
+Cost_per_year_E33_c = np.around(BV_E33*Cost_E33/Time_to_repl_E33_c) # $/year
+
+Cost_per_year_MET = np.around(BV_MET*Cost_MET/Time_to_repl_MET) # $/year
+Cost_per_year_MET_c = np.around(BV_MET*Cost_MET/Time_to_repl_MET_c) # $/year
+
+
     
 x = PrettyTable()
 
@@ -174,8 +184,10 @@ x.add_row(["MAE", MAE_GFH, MAE_E33, MAE_MET])
 x.add_row(["BV to breakthrough, extrapolated", BV10_m, BV10_m_E33, BV10_m_MET])
 x.add_row(["BV to breakthrough, conservative", BV10_m_c, BV10_m_E33_c, BV10_m_MET_c])
 x.add_row(["Unit Cost ($/m3)", Cost_GFH, Cost_E33, Cost_MET])
-x.add_row(["Time to replacement, extrapolated (years)", Time_to_repl_GFH, Time_to_repl_E33, Time_to_repl_MET])
-x.add_row(["Time to replacement, conservative (years)", Time_to_repl_GFH_c, Time_to_repl_E33_c, Time_to_repl_MET_c])
+x.add_row(["Time to replacement, extrapolated (months)", Time_to_repl_GFH, Time_to_repl_E33, Time_to_repl_MET])
+x.add_row(["Time to replacement, conservative (months)", Time_to_repl_GFH_c, Time_to_repl_E33_c, Time_to_repl_MET_c])
+x.add_row(["Media Cost, extrapolated ($/year)", Cost_per_year_GFH, Cost_per_year_E33, Cost_per_year_MET])
+x.add_row(["Media Cost, conservative ($/year)", Cost_per_year_GFH_c, Cost_per_year_E33_c, Cost_per_year_MET_c])
 
 
 print(x)
