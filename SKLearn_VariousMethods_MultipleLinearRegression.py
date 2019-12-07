@@ -20,18 +20,28 @@ BV10_E33 = np.log(np.array([30100,17100,13900,7200,5500,5100,8500,6000,4000,3150
 BV10_MET = np.log(np.array([13500,8800,4600,5000,2300,2000,4300,1500,1400,22100,14900,7200,13900,8400,5800,7700,5000,3100,38900,36800,29000,25900,18600,12000,16600,15000,11700]))
 
 Xp = np.array([pH,Si,V,P,As])
-#print('Xp:'+ str(Xp.shape))
+print('Xp:'+ str(Xp.shape))
 X = Xp.T
 #print('X:'+ str(X.shape))
 
 #---------------------------------------------------------------
 ## Design Criteria!
 #---------------------------------------------------------------
+
 pH_m = 7.7 # S.U.
 Si_m = 17 # mg/L as SiO2
 V_m = 3.4 # ug/L as V
 P_m = 80*30.974/(4*15.999+30.974) # ug/L as P (coversion shown here)
 As_m = 23 # ug/L as As
+
+## Conservative Values, no extrapolation here.
+
+pH_m_c = 7.7 # S.U.
+Si_m_c = 33 # mg/L as SiO2
+V_m_c = 21 # ug/L as V
+P_m_c = 55 # ug/L as P (coversion shown here)
+As_m_c = 23 # ug/L as As
+
 
 #---------------------------------------------------------------
 ## GFH
@@ -55,8 +65,12 @@ error_stats(np.exp(BV10_GFH), np.exp(PredictionsORD_GFH))
 Coef = lm.coef_
 
 BV10_m = lm.intercept_ + Coef[0]*pH_m + Coef[1]*Si_m + Coef[2]*V_m + Coef[3]*P_m+Coef[4]*As_m	
+BV10_m_c = lm.intercept_ + Coef[0]*pH_m_c + Coef[1]*Si_m_c + Coef[2]*V_m_c + Coef[3]*P_m_c+Coef[4]*As_m_c	
+
 
 print("Bed volumes to breakthrough for GFH: " +str(np.around(np.exp(BV10_m))))
+print("Bed volumes to breakthrough for GFH, conservative: " +str(np.around(np.exp(BV10_m_c))))
+
 
 #---------------------------------------------------------------
 ## E33
@@ -79,8 +93,10 @@ error_stats(np.exp(BV10_E33), np.exp(PredictionsORD_E33))
 Coef = lm.coef_
 
 BV10_m_E33 = lm.intercept_ + Coef[0]*pH_m + Coef[1]*Si_m + Coef[2]*V_m + Coef[3]*P_m+Coef[4]*As_m	
-
+BV10_m_E33_c = lm.intercept_ + Coef[0]*pH_m_c + Coef[1]*Si_m_c + Coef[2]*V_m_c + Coef[3]*P_m_c+Coef[4]*As_m_c
 print("Bed volumes to breakthrough for E33: " +str(np.around(np.exp(BV10_m_E33))))
+print("Bed volumes to breakthrough for E33, conservative: " +str(np.around(np.exp(BV10_m_E33_c))))
+
 
 
 #---------------------------------------------------------------
@@ -104,26 +120,41 @@ error_stats(np.exp(BV10_MET), np.exp(PredictionsORD_MET))
 Coef = lm.coef_
 
 BV10_m_MET = lm.intercept_ + Coef[0]*pH_m + Coef[1]*Si_m + Coef[2]*V_m + Coef[3]*P_m+Coef[4]*As_m	
+BV10_m_MET_c = lm.intercept_ + Coef[0]*pH_m_c + Coef[1]*Si_m_c + Coef[2]*V_m_c + Coef[3]*P_m_c+Coef[4]*As_m_c
 
 print("Bed volumes to breakthrough for METSORB: " +str(np.around(np.exp(BV10_m_MET))))
+print("Bed volumes to breakthrough for METSORB, conservative: " +str(np.around(np.exp(BV10_m_MET_c))))
 print()
 print("SUMMARY")
 print("Bed volumes to breakthrough for GFH: " +str(np.around(np.exp(BV10_m))))
+print("Bed volumes to breakthrough for GFH, conservative: " +str(np.around(np.exp(BV10_m_c))))
 print("Bed volumes to breakthrough for E33: " +str(np.around(np.exp(BV10_m_E33))))
+print("Bed volumes to breakthrough for E33, conservative: " +str(np.around(np.exp(BV10_m_E33_c))))
 print("Bed volumes to breakthrough for METSORB: " +str(np.around(np.exp(BV10_m_MET))))
+print("Bed volumes to breakthrough for METSORB, conservative: " +str(np.around(np.exp(BV10_m_MET_c))))
 
 #---------------------------------------------------------------
 ## COST CALCULATION - Data from Table 2-10 in EPA document (2011)
 #---------------------------------------------------------------
 
-# Currently in google sheets
+Cost_GFH = 240*35.315 # $/m3
+Cost_E33 = 156*35.315 # $/m3
+Cost_MET = 3900/200*1000 # $/m3
+
+BV_GFH = 10320/1000 # m3/BV, bed volume of the large scale reactor for GFH
+BV_E33 = 10320/1000 # m3/BV
+BV_MET = 9840/1000  # m3/BV
+
+Q = 900*60*24*365/264.172 # m3/year
+
+BV_Treated_GFH = Q/BV_GFH # BV/year
 
 ################################################################
 ################ OTHER METHODS BELOW, NOT USED #################
 ################################################################
 
 
-## Which models were testedd determined from: https://scikit-learn.org/stable/tutorial/machine_learning_map/index.html
+## Which models were tested determined from: https://scikit-learn.org/stable/tutorial/machine_learning_map/index.html
 
 
 # #---------------------------------------------------------------
