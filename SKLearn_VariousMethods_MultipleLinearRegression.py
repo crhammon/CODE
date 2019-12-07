@@ -20,7 +20,7 @@ BV10_E33 = np.log(np.array([30100,17100,13900,7200,5500,5100,8500,6000,4000,3150
 BV10_MET = np.log(np.array([13500,8800,4600,5000,2300,2000,4300,1500,1400,22100,14900,7200,13900,8400,5800,7700,5000,3100,38900,36800,29000,25900,18600,12000,16600,15000,11700]))
 
 Xp = np.array([pH,Si,V,P,As])
-print('Xp:'+ str(Xp.shape))
+# print('Xp:'+ str(Xp.shape))
 X = Xp.T
 #print('X:'+ str(X.shape))
 
@@ -48,98 +48,101 @@ As_m_c = 23 # ug/L as As
 #---------------------------------------------------------------
 print("For ordinary least squares regression on log-transformed BV10s: ")
 print()
-print("For GFH:")
+# print("For GFH:")
 lm = linear_model.LinearRegression()
 model = lm.fit(X,BV10_GFH)
 PredictionsORD_GFH = lm.predict(X)
 #print(PredictionsORD_GFH)
-print()
-print("Data:")
-print(np.exp(BV10_GFH))
-print()
-print("Predictions:")
-print(np.around(np.exp(PredictionsORD_GFH)))
-print()
-error_stats(np.exp(BV10_GFH), np.exp(PredictionsORD_GFH))
+# print()
+# print("Data:")
+# print(np.exp(BV10_GFH))
+# print()
+# print("Predictions:")
+# print(np.around(np.exp(PredictionsORD_GFH)))
+# print()
+
+# error_stats(np.exp(BV10_GFH), np.exp(PredictionsORD_GFH))
+
+MAE_GFH = np.around(metrics.mean_absolute_error(np.exp(BV10_GFH), np.exp(PredictionsORD_GFH)))
+r2_GFH=np.around(metrics.r2_score(np.exp(BV10_GFH), np.exp(PredictionsORD_GFH)),2)
 
 Coef = lm.coef_
 
-BV10_m = lm.intercept_ + Coef[0]*pH_m + Coef[1]*Si_m + Coef[2]*V_m + Coef[3]*P_m+Coef[4]*As_m	
-BV10_m_c = lm.intercept_ + Coef[0]*pH_m_c + Coef[1]*Si_m_c + Coef[2]*V_m_c + Coef[3]*P_m_c+Coef[4]*As_m_c	
+BV10_m = np.around(np.exp(lm.intercept_ + Coef[0]*pH_m + Coef[1]*Si_m + Coef[2]*V_m + Coef[3]*P_m+Coef[4]*As_m))
+BV10_m_c = np.around(np.exp(lm.intercept_ + Coef[0]*pH_m_c + Coef[1]*Si_m_c + Coef[2]*V_m_c + Coef[3]*P_m_c+Coef[4]*As_m_c))
 
 
-print("Bed volumes to breakthrough for GFH: " +str(np.around(np.exp(BV10_m))))
-print("Bed volumes to breakthrough for GFH, conservative: " +str(np.around(np.exp(BV10_m_c))))
+# print("Bed volumes to breakthrough for GFH: " +str(BV10_m))
+# print("Bed volumes to breakthrough for GFH, conservative: " +str(BV10_m_c))
 
 
 #---------------------------------------------------------------
 ## E33
 #---------------------------------------------------------------
-print()
-print("For E33:")
+# print()
+# print("For E33:")
 lm = linear_model.LinearRegression()
 model = lm.fit(X,BV10_E33)
 PredictionsORD_E33 = lm.predict(X)
 #print(PredictionsORD_GFH)
-print()
-print("Data:")
-print(np.exp(BV10_E33))
-print()
-print("Predictions:")
-print(np.around(np.exp(PredictionsORD_E33)))
-print()
-error_stats(np.exp(BV10_E33), np.exp(PredictionsORD_E33))
+# print()
+# print("Data:")
+# print(np.exp(BV10_E33))
+# print()
+# print("Predictions:")
+# print(np.around(np.exp(PredictionsORD_E33)))
+# print()
+# error_stats(np.exp(BV10_E33), np.exp(PredictionsORD_E33))
+
+MAE_E33 = np.around(metrics.mean_absolute_error(np.exp(BV10_E33), np.exp(PredictionsORD_E33)))
+r2_E33=np.around(metrics.r2_score(np.exp(BV10_E33), np.exp(PredictionsORD_E33)),2)
 
 Coef = lm.coef_
 
-BV10_m_E33 = lm.intercept_ + Coef[0]*pH_m + Coef[1]*Si_m + Coef[2]*V_m + Coef[3]*P_m+Coef[4]*As_m	
-BV10_m_E33_c = lm.intercept_ + Coef[0]*pH_m_c + Coef[1]*Si_m_c + Coef[2]*V_m_c + Coef[3]*P_m_c+Coef[4]*As_m_c
-print("Bed volumes to breakthrough for E33: " +str(np.around(np.exp(BV10_m_E33))))
-print("Bed volumes to breakthrough for E33, conservative: " +str(np.around(np.exp(BV10_m_E33_c))))
+BV10_m_E33 = np.around(np.exp(lm.intercept_ + Coef[0]*pH_m + Coef[1]*Si_m + Coef[2]*V_m + Coef[3]*P_m+Coef[4]*As_m))
+BV10_m_E33_c = np.around(np.exp(lm.intercept_ + Coef[0]*pH_m_c + Coef[1]*Si_m_c + Coef[2]*V_m_c + Coef[3]*P_m_c+Coef[4]*As_m_c))
+# print("Bed volumes to breakthrough for E33: " +str(BV10_m_E33))
+# print("Bed volumes to breakthrough for E33, conservative: " +str(BV10_m_E33_c))
 
 
 
 #---------------------------------------------------------------
 ## METSORB
 #---------------------------------------------------------------
-print()
-print("For METSORB:")
+# print()
+# print("For METSORB:")
 lm = linear_model.LinearRegression()
 model = lm.fit(X,BV10_MET)
 PredictionsORD_MET = lm.predict(X)
 #print(PredictionsORD_GFH)
-print()
-print("Data:")
-print(np.exp(BV10_MET))
-print()
-print("Predictions:")
-print(np.around(np.exp(PredictionsORD_MET)))
-print()
-error_stats(np.exp(BV10_MET), np.exp(PredictionsORD_MET))
+# print()
+# print("Data:")
+# print(np.exp(BV10_MET))
+# print()
+# print("Predictions:")
+# print(np.around(np.exp(PredictionsORD_MET)))
+# print()
+# error_stats(np.exp(BV10_MET), np.exp(PredictionsORD_MET))
+
+MAE_MET = np.around(metrics.mean_absolute_error(np.exp(BV10_MET), np.exp(PredictionsORD_MET)))
+r2_MET=np.around(metrics.r2_score(np.exp(BV10_MET), np.exp(PredictionsORD_MET)),2)
 
 Coef = lm.coef_
 
-BV10_m_MET = lm.intercept_ + Coef[0]*pH_m + Coef[1]*Si_m + Coef[2]*V_m + Coef[3]*P_m+Coef[4]*As_m	
-BV10_m_MET_c = lm.intercept_ + Coef[0]*pH_m_c + Coef[1]*Si_m_c + Coef[2]*V_m_c + Coef[3]*P_m_c+Coef[4]*As_m_c
+BV10_m_MET = np.around(np.exp(lm.intercept_ + Coef[0]*pH_m + Coef[1]*Si_m + Coef[2]*V_m + Coef[3]*P_m+Coef[4]*As_m))
+BV10_m_MET_c = np.around(np.exp(lm.intercept_ + Coef[0]*pH_m_c + Coef[1]*Si_m_c + Coef[2]*V_m_c + Coef[3]*P_m_c+Coef[4]*As_m_c))
 
-print("Bed volumes to breakthrough for METSORB: " +str(np.around(np.exp(BV10_m_MET))))
-print("Bed volumes to breakthrough for METSORB, conservative: " +str(np.around(np.exp(BV10_m_MET_c))))
-print()
-print("SUMMARY")
-print("Bed volumes to breakthrough for GFH: " +str(np.around(np.exp(BV10_m))))
-print("Bed volumes to breakthrough for GFH, conservative: " +str(np.around(np.exp(BV10_m_c))))
-print("Bed volumes to breakthrough for E33: " +str(np.around(np.exp(BV10_m_E33))))
-print("Bed volumes to breakthrough for E33, conservative: " +str(np.around(np.exp(BV10_m_E33_c))))
-print("Bed volumes to breakthrough for METSORB: " +str(np.around(np.exp(BV10_m_MET))))
-print("Bed volumes to breakthrough for METSORB, conservative: " +str(np.around(np.exp(BV10_m_MET_c))))
+# print("Bed volumes to breakthrough for METSORB: " +str(BV10_m_MET))
+# print("Bed volumes to breakthrough for METSORB, conservative: " +str(BV10_m_MET_c))
+
 
 #---------------------------------------------------------------
 ## COST CALCULATION - Data from Table 2-10 in EPA document (2011)
 #---------------------------------------------------------------
 
-Cost_GFH = 240*35.315 # $/m3
-Cost_E33 = 156*35.315 # $/m3
-Cost_MET = 3900/200*1000 # $/m3
+Cost_GFH = np.around(240*35.315) # $/m3
+Cost_E33 = np.around(156*35.315) # $/m3
+Cost_MET = np.around(3900/200*1000) # $/m3
 
 BV_GFH = 10320/1000 # m3/BV, bed volume of the large scale reactor for GFH
 BV_E33 = 10320/1000 # m3/BV
@@ -148,6 +151,34 @@ BV_MET = 9840/1000  # m3/BV
 Q = 900*60*24*365/264.172 # m3/year
 
 BV_Treated_GFH = Q/BV_GFH # BV/year
+BV_Treated_E33 = Q/BV_E33 # BV/year
+BV_Treated_MET = Q/BV_MET # BV/year
+
+Time_to_repl_GFH = np.around(BV10_m/BV_Treated_GFH,2) # Time to replacement for media, years
+Time_to_repl_GFH_c = np.around(BV10_m_c/BV_Treated_GFH,2)
+
+Time_to_repl_E33 = np.around(BV10_m/BV_Treated_E33,2) # Time to replacement for media, years
+Time_to_repl_E33_c = np.around(BV10_m_c/BV_Treated_E33,2)
+
+Time_to_repl_MET = np.around(BV10_m/BV_Treated_MET,2) # Time to replacement for media, years
+Time_to_repl_MET_c = np.around(BV10_m_c/BV_Treated_MET,2)
+
+from prettytable import PrettyTable
+    
+x = PrettyTable()
+
+x.field_names = ["Parameter", "GFH", "E33", "MetSorb"]
+
+x.add_row(["R2", r2_GFH, r2_E33, r2_MET])
+x.add_row(["MAE", MAE_GFH, MAE_E33, MAE_MET])
+x.add_row(["BV to breakthrough, extrapolated", BV10_m, BV10_m_E33, BV10_m_MET])
+x.add_row(["BV to breakthrough, conservative", BV10_m_c, BV10_m_E33_c, BV10_m_MET_c])
+x.add_row(["Unit Cost ($/m3)", Cost_GFH, Cost_E33, Cost_MET])
+x.add_row(["Time to replacement, extrapolated (years)", Time_to_repl_GFH, Time_to_repl_E33, Time_to_repl_MET])
+x.add_row(["Time to replacement, conservative (years)", Time_to_repl_GFH_c, Time_to_repl_E33_c, Time_to_repl_MET_c])
+
+
+print(x)
 
 ################################################################
 ################ OTHER METHODS BELOW, NOT USED #################
