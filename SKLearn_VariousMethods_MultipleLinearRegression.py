@@ -173,8 +173,6 @@ Cost_per_year_E33_c = np.around(BV_E33*Cost_E33/Time_to_repl_E33_c) # $/year
 Cost_per_year_MET = np.around(BV_MET*Cost_MET/Time_to_repl_MET) # $/year
 Cost_per_year_MET_c = np.around(BV_MET*Cost_MET/Time_to_repl_MET_c) # $/year
 
-
-    
 x = PrettyTable()
 
 x.field_names = ["Parameter", "GFH", "E33", "MetSorb"]
@@ -188,7 +186,6 @@ x.add_row(["Time to replacement, extrapolated (months)", Time_to_repl_GFH, Time_
 x.add_row(["Time to replacement, conservative (months)", Time_to_repl_GFH_c, Time_to_repl_E33_c, Time_to_repl_MET_c])
 x.add_row(["Media Cost, extrapolated ($/year)", Cost_per_year_GFH, Cost_per_year_E33, Cost_per_year_MET])
 x.add_row(["Media Cost, conservative ($/year)", Cost_per_year_GFH_c, Cost_per_year_E33_c, Cost_per_year_MET_c])
-
 
 print(x)
 
