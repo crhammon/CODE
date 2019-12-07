@@ -15,3 +15,6 @@ def error_stats(y_true, y_pred):
 	print('RMSE: ', round(np.sqrt(mse),4))
 	print()
 	print()
+
+	#verify
+	#please work
