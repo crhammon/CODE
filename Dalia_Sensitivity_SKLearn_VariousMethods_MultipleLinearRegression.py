@@ -26,14 +26,14 @@ sheet=wb.active
 
 # This will run the code many times, spitting out the values you want!
 
-pH_Low = 6.6 # DALIA CHANGE THIS WHEN SWITCHING
-pH_High = 8# DALIA CHANGE THIS WHEN SWITCHING
-dpH = 0.1# DALIA CHANGE THIS WHEN SWITCHING
-pH_Range = np.arange(pH_Low, pH_High, dpH )# DALIA CHANGE THIS WHEN SWITCHING
-print(pH_Range)# DALIA CHANGE THIS WHEN SWITCHING
+pH_Low = 6.6   # DALIA CHANGE THIS WHEN SWITCHING
+pH_High = 8    # DALIA CHANGE THIS WHEN SWITCHING
+dpH = 0.1      # DALIA CHANGE THIS WHEN SWITCHING
+pH_Range = np.arange(pH_Low, pH_High, dpH )                  # DALIA CHANGE THIS WHEN SWITCHING
+print(pH_Range)                                              # DALIA CHANGE THIS WHEN SWITCHING
 
 sheet.cell(row=1, column=1).value = 'pH'                     # DALIA CHANGE THIS WHEN SWITCHING
-sheet.cell(row=1, column=2).value = 'Extrapolated'
+sheet.cell(row=1, column=2).value = 'Extrapolated' 
 sheet.cell(row=1, column=3).value = 'Conservative'
 
 for i in range(0,np.size(pH_Range)):
@@ -208,8 +208,8 @@ for i in range(0,np.size(pH_Range)):
 	Cost_per_year_MET = np.around(BV_MET*Cost_MET/Time_to_repl_MET) # $/year
 	Cost_per_year_MET_c = np.around(BV_MET*Cost_MET/Time_to_repl_MET_c) # $/year
 
-	sheet.cell(row=i+2, column=2).value = Cost_per_year_E33                        # DALIA CHANGE THIS WHEN SWITCHING
-	sheet.cell(row=i+2, column=3).value = Cost_per_year_E33_c                      # DALIA CHANGE THIS WHEN SWITCHING
+	sheet.cell(row=i+2, column=2).value = Cost_per_year_E33                        # DALIA Make sure it is correct adsorbent
+	sheet.cell(row=i+2, column=3).value = Cost_per_year_E33_c                      # DALIA Make sure it is correct adsorbent
 
 	wb.save(filepath)
 
