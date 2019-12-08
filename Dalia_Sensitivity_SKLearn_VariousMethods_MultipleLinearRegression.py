@@ -27,7 +27,7 @@ sheet=wb.active
 # This will run the code many times, spitting out the values you want!
 
 pH_Low = 6.6 # DALIA CHANGE THIS WHEN SWITCHING
-pH_High = 6.9# DALIA CHANGE THIS WHEN SWITCHING
+pH_High = 8# DALIA CHANGE THIS WHEN SWITCHING
 dpH = 0.1# DALIA CHANGE THIS WHEN SWITCHING
 pH_Range = np.arange(pH_Low, pH_High, dpH )# DALIA CHANGE THIS WHEN SWITCHING
 print(pH_Range)# DALIA CHANGE THIS WHEN SWITCHING
