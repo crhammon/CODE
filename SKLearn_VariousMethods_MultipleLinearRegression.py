@@ -145,11 +145,12 @@ Cost_GFH = np.around(240*35.315) # $/m3
 Cost_E33 = np.around(156*35.315) # $/m3
 Cost_MET = np.around(3900/200*1000) # $/m3
 
-BV_GFH = 10320/1000 # m3/BV, bed volume of the large scale reactor for GFH
-BV_E33 = 10320/1000 # m3/BV
-BV_MET = 9840/1000  # m3/BV
+BV_GFH = 10.22 # m3/BV, bed volume of the large scale reactor for GFH
+BV_E33 = 10.22 # m3/BV
+BV_MET = 10.22  # m3/BV
 
 Q = 900*60*24*365/264.172 # m3/year
+print(Q)
 
 BV_Treated_GFH = Q/BV_GFH # BV/year
 BV_Treated_E33 = Q/BV_E33 # BV/year
@@ -158,17 +159,20 @@ BV_Treated_MET = Q/BV_MET # BV/year
 Time_to_repl_GFH = np.around(BV10_m/BV_Treated_GFH,2) # Time to replacement for media, years
 Time_to_repl_GFH_c = np.around(BV10_m_c/BV_Treated_GFH,2)
 
-Time_to_repl_E33 = np.around(BV10_m/BV_Treated_E33,2) # Time to replacement for media, years
-Time_to_repl_E33_c = np.around(BV10_m_c/BV_Treated_E33,2)
+Time_to_repl_E33 = np.around(BV10_m_E33/BV_Treated_E33,2) # Time to replacement for media, years
+Time_to_repl_E33_c = np.around(BV10_m_E33_c/BV_Treated_E33,2)
 
-Time_to_repl_MET = np.around(BV10_m/BV_Treated_MET,2) # Time to replacement for media, years
-Time_to_repl_MET_c = np.around(BV10_m_c/BV_Treated_MET,2)
+Time_to_repl_MET = np.around(BV10_m_MET/BV_Treated_MET,2) # Time to replacement for media, years
+Time_to_repl_MET_c = np.around(BV10_m_MET_c/BV_Treated_MET,2)
 
 Cost_per_year_GFH = np.around(BV_GFH*Cost_GFH/Time_to_repl_GFH) # $/year
 Cost_per_year_GFH_c = np.around(BV_GFH*Cost_GFH/Time_to_repl_GFH_c) # $/year
 
 Cost_per_year_E33 = np.around(BV_E33*Cost_E33/Time_to_repl_E33) # $/year
 Cost_per_year_E33_c = np.around(BV_E33*Cost_E33/Time_to_repl_E33_c) # $/year
+
+Cost_per_year_E33_total = np.around(BV_E33*Cost_E33/Time_to_repl_E33/.8) # $/year
+Cost_per_year_E33_c_total = np.around(BV_E33*Cost_E33/Time_to_repl_E33_c/.8) # $/year
 
 Cost_per_year_MET = np.around(BV_MET*Cost_MET/Time_to_repl_MET) # $/year
 Cost_per_year_MET_c = np.around(BV_MET*Cost_MET/Time_to_repl_MET_c) # $/year
@@ -186,8 +190,41 @@ x.add_row(["Time to replacement, extrapolated (months)", Time_to_repl_GFH, Time_
 x.add_row(["Time to replacement, conservative (months)", Time_to_repl_GFH_c, Time_to_repl_E33_c, Time_to_repl_MET_c])
 x.add_row(["Media Cost, extrapolated ($/year)", Cost_per_year_GFH, Cost_per_year_E33, Cost_per_year_MET])
 x.add_row(["Media Cost, conservative ($/year)", Cost_per_year_GFH_c, Cost_per_year_E33_c, Cost_per_year_MET_c])
+x.add_row(["Total Cost, extrapolated ($/year)", "n/a" , Cost_per_year_E33_total, "n/a"])
+x.add_row(["Total Cost, conservative ($/year)","n/a" , Cost_per_year_E33_c_total,"n/a" ])
 
 print(x)
+
+
+#---------------------------------------------------------------
+## Design of System - E33
+#---------------------------------------------------------------
+
+HLR = 17/60 # m/min
+EBCT = 3 # min
+Media_Depth = HLR*EBCT # m
+Q = 900/264.172 # m3/min
+Area = Q/HLR # m
+Diameter = m.sqrt(4/m.pi*Area)
+Media_Vol = Area*Media_Depth
+
+x1 = PrettyTable()
+
+x1.field_names = ["Parameter", "Value"]
+
+
+x1.add_row(["HLR (m/min)", np.around(HLR,3)])
+x1.add_row(["EBCT (min)", np.around(EBCT,1)])
+x1.add_row(["Media Depth (m)", np.around(Media_Depth,3)])
+x1.add_row(["Q (m3/min)", np.around(Q,2)])
+x1.add_row(["Area (m2)", np.around(Area,2)])
+x1.add_row(["Diameter (m)", np.around(Diameter,3)])
+x1.add_row(["Media Volume (m3)", np.around(Media_Vol,2)])
+
+
+print(x1)
+
+
 
 ################################################################
 ################ OTHER METHODS BELOW, NOT USED #################

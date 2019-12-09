@@ -78,7 +78,6 @@ for i in range(0,np.size(pH_Range)):
 	P_m_c = 55 # ug/L as P (coversion shown here)
 	As_m_c = 23 # ug/L as As
 
-
 	#---------------------------------------------------------------
 	## GFH
 	#---------------------------------------------------------------
@@ -180,11 +179,12 @@ for i in range(0,np.size(pH_Range)):
 	Cost_E33 = np.around(156*35.315) # $/m3
 	Cost_MET = np.around(3900/200*1000) # $/m3
 
-	BV_GFH = 10320/1000 # m3/BV, bed volume of the large scale reactor for GFH
-	BV_E33 = 10320/1000 # m3/BV
-	BV_MET = 9840/1000  # m3/BV
+	BV_GFH = 10.22 # m3/BV, bed volume of the large scale reactor for GFH
+	BV_E33 = 10.22 # m3/BV
+	BV_MET = 10.22  # m3/BV
 
 	Q = 900*60*24*365/264.172 # m3/year
+	print(Q)
 
 	BV_Treated_GFH = Q/BV_GFH # BV/year
 	BV_Treated_E33 = Q/BV_E33 # BV/year
@@ -193,11 +193,11 @@ for i in range(0,np.size(pH_Range)):
 	Time_to_repl_GFH = np.around(BV10_m/BV_Treated_GFH,2) # Time to replacement for media, years
 	Time_to_repl_GFH_c = np.around(BV10_m_c/BV_Treated_GFH,2)
 
-	Time_to_repl_E33 = np.around(BV10_m/BV_Treated_E33,2) # Time to replacement for media, years
-	Time_to_repl_E33_c = np.around(BV10_m_c/BV_Treated_E33,2)
+	Time_to_repl_E33 = np.around(BV10_m_E33/BV_Treated_E33,2) # Time to replacement for media, years
+	Time_to_repl_E33_c = np.around(BV10_m_E33_c/BV_Treated_E33,2)
 
-	Time_to_repl_MET = np.around(BV10_m/BV_Treated_MET,2) # Time to replacement for media, years
-	Time_to_repl_MET_c = np.around(BV10_m_c/BV_Treated_MET,2)
+	Time_to_repl_MET = np.around(BV10_m_MET/BV_Treated_MET,2) # Time to replacement for media, years
+	Time_to_repl_MET_c = np.around(BV10_m_MET_c/BV_Treated_MET,2)
 
 	Cost_per_year_GFH = np.around(BV_GFH*Cost_GFH/Time_to_repl_GFH) # $/year
 	Cost_per_year_GFH_c = np.around(BV_GFH*Cost_GFH/Time_to_repl_GFH_c) # $/year
@@ -205,29 +205,34 @@ for i in range(0,np.size(pH_Range)):
 	Cost_per_year_E33 = np.around(BV_E33*Cost_E33/Time_to_repl_E33) # $/year
 	Cost_per_year_E33_c = np.around(BV_E33*Cost_E33/Time_to_repl_E33_c) # $/year
 
+	Cost_per_year_E33_total = np.around(BV_E33*Cost_E33/Time_to_repl_E33/.8) # $/year
+	Cost_per_year_E33_c_total = np.around(BV_E33*Cost_E33/Time_to_repl_E33_c/.8) # $/year
+
 	Cost_per_year_MET = np.around(BV_MET*Cost_MET/Time_to_repl_MET) # $/year
 	Cost_per_year_MET_c = np.around(BV_MET*Cost_MET/Time_to_repl_MET_c) # $/year
 
+	x = PrettyTable()
+
+	x.field_names = ["Parameter", "GFH", "E33", "MetSorb"]
+
+	x.add_row(["R2", r2_GFH, r2_E33, r2_MET])
+	x.add_row(["MAE", MAE_GFH, MAE_E33, MAE_MET])
+	x.add_row(["BV to breakthrough, extrapolated", BV10_m, BV10_m_E33, BV10_m_MET])
+	x.add_row(["BV to breakthrough, conservative", BV10_m_c, BV10_m_E33_c, BV10_m_MET_c])
+	x.add_row(["Unit Cost ($/m3)", Cost_GFH, Cost_E33, Cost_MET])
+	x.add_row(["Time to replacement, extrapolated (years)", Time_to_repl_GFH, Time_to_repl_E33, Time_to_repl_MET])
+	x.add_row(["Time to replacement, conservative (years)", Time_to_repl_GFH_c, Time_to_repl_E33_c, Time_to_repl_MET_c])
+	x.add_row(["Media Cost, extrapolated ($/year)", Cost_per_year_GFH, Cost_per_year_E33, Cost_per_year_MET])
+	x.add_row(["Media Cost, conservative ($/year)", Cost_per_year_GFH_c, Cost_per_year_E33_c, Cost_per_year_MET_c])
+	x.add_row(["Total Cost, extrapolated ($/year)", "n/a" , Cost_per_year_E33_total, "n/a"])
+	x.add_row(["Total Cost, conservative ($/year)","n/a" , Cost_per_year_E33_c_total,"n/a" ])
+
+	print(x)
+	
 	sheet.cell(row=i+2, column=2).value = Cost_per_year_E33                        # DALIA Make sure it is correct adsorbent
 	sheet.cell(row=i+2, column=3).value = Cost_per_year_E33_c                      # DALIA Make sure it is correct adsorbent
 
 	wb.save(filepath)
-
-x = PrettyTable()
-
-x.field_names = ["Parameter", "GFH", "E33", "MetSorb"]
-
-x.add_row(["R2", r2_GFH, r2_E33, r2_MET])
-x.add_row(["MAE", MAE_GFH, MAE_E33, MAE_MET])
-x.add_row(["BV to breakthrough, extrapolated", BV10_m, BV10_m_E33, BV10_m_MET])
-x.add_row(["BV to breakthrough, conservative", BV10_m_c, BV10_m_E33_c, BV10_m_MET_c])
-x.add_row(["Unit Cost ($/m3)", Cost_GFH, Cost_E33, Cost_MET])
-x.add_row(["Time to replacement, extrapolated (months)", Time_to_repl_GFH, Time_to_repl_E33, Time_to_repl_MET])
-x.add_row(["Time to replacement, conservative (months)", Time_to_repl_GFH_c, Time_to_repl_E33_c, Time_to_repl_MET_c])
-x.add_row(["Media Cost, extrapolated ($/year)", Cost_per_year_GFH, Cost_per_year_E33, Cost_per_year_MET])
-x.add_row(["Media Cost, conservative ($/year)", Cost_per_year_GFH_c, Cost_per_year_E33_c, Cost_per_year_MET_c])
-
-print(x)
 
 ################################################################
 ################ OTHER METHODS BELOW, NOT USED #################
