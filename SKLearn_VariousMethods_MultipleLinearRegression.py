@@ -116,7 +116,60 @@ print("Bed volumes to breakthrough for METSORB: " +str(np.around(np.exp(BV10_m_M
 ## COST CALCULATION - Data from Table 2-10 in EPA document (2011)
 #---------------------------------------------------------------
 
+<<<<<<< Updated upstream
 # Currently in google sheets
+=======
+Cost_GFH = np.around(240*35.315) # $/m3
+Cost_E33 = np.around(156*35.315) # $/m3
+Cost_MET = np.around(3900/200*1000) # $/m3
+
+BV_GFH = 10320/1000 # m3/BV, bed volume of the large scale reactor for GFH
+BV_E33 = 10320/1000 # m3/BV
+BV_MET = 9840/1000  # m3/BV
+
+Q = 900*60*24*365/264.172 # m3/year
+
+BV_Treated_GFH = Q/BV_GFH # BV/year
+BV_Treated_E33 = Q/BV_E33 # BV/year
+BV_Treated_MET = Q/BV_MET # BV/year
+
+Time_to_repl_GFH = np.around(BV10_m/BV_Treated_GFH,2) # Time to replacement for media, years
+Time_to_repl_GFH_c = np.around(BV10_m_c/BV_Treated_GFH,2)
+
+Time_to_repl_E33 = np.around(BV10_m/BV_Treated_E33,2) # Time to replacement for media, years
+Time_to_repl_E33_c = np.around(BV10_m_c/BV_Treated_E33,2)
+
+Time_to_repl_MET = np.around(BV10_m/BV_Treated_MET,2) # Time to replacement for media, years
+Time_to_repl_MET_c = np.around(BV10_m_c/BV_Treated_MET,2)
+
+Cost_per_year_GFH = np.around(BV_GFH*Cost_GFH/Time_to_repl_GFH) # $/year
+Cost_per_year_GFH_c = np.around(BV_GFH*Cost_GFH/Time_to_repl_GFH_c) # $/year
+
+Cost_per_year_E33 = np.around(BV_E33*Cost_E33/Time_to_repl_E33) # $/year
+Cost_per_year_E33_c = np.around(BV_E33*Cost_E33/Time_to_repl_E33_c) # $/year
+
+Cost_per_year_MET = np.around(BV_MET*Cost_MET/Time_to_repl_MET) # $/year
+Cost_per_year_MET_c = np.around(BV_MET*Cost_MET/Time_to_repl_MET_c) # $/year
+
+
+    
+x = PrettyTable()
+
+x.field_names = ["Parameter", "GFH", "E33", "MetSorb"]
+
+x.add_row(["R2", r2_GFH, r2_E33, r2_MET])
+x.add_row(["MAE", MAE_GFH, MAE_E33, MAE_MET])
+x.add_row(["BV to breakthrough, extrapolated", BV10_m, BV10_m_E33, BV10_m_MET])
+x.add_row(["BV to breakthrough, conservative", BV10_m_c, BV10_m_E33_c, BV10_m_MET_c])
+x.add_row(["Unit Cost ($/m3)", Cost_GFH, Cost_E33, Cost_MET])
+x.add_row(["Time to replacement, extrapolated (months)", Time_to_repl_GFH, Time_to_repl_E33, Time_to_repl_MET])
+x.add_row(["Time to replacement, conservative (months)", Time_to_repl_GFH_c, Time_to_repl_E33_c, Time_to_repl_MET_c])
+x.add_row(["Media Cost, extrapolated ($/year)", Cost_per_year_GFH, Cost_per_year_E33, Cost_per_year_MET])
+x.add_row(["Media Cost, conservative ($/year)", Cost_per_year_GFH_c, Cost_per_year_E33_c, Cost_per_year_MET_c])
+
+
+print(x)
+>>>>>>> Stashed changes
 
 ################################################################
 ################ OTHER METHODS BELOW, NOT USED #################
@@ -163,4 +216,13 @@ print("Bed volumes to breakthrough for METSORB: " +str(np.around(np.exp(BV10_m_M
 # ## Stochastic Gradient Descent
 # #---------------------------------------------------------------
 
+<<<<<<< Updated upstream
 
+=======
+# SGD = SGDRegressor(loss="huber", penalty="l2", max_iter=500000)
+# SGD.fit(X,BV10)
+# #print("For Stochastic Gradient Descent: ")
+# Predictions_SGD = SGD.predict(X)
+# #print(Predictions_lasso)
+# #error_stats(BV10, Predictions_SGD)
+>>>>>>> Stashed changes
