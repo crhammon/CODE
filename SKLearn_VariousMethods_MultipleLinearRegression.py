@@ -145,6 +145,7 @@ Cost_GFH = np.around(240*35.315) # $/m3
 Cost_E33 = np.around(156*35.315) # $/m3
 Cost_MET = np.around(3900/200*1000) # $/m3
 
+
 BV_GFH = 10.22 # m3/BV, bed volume of the large scale reactor for GFH
 BV_E33 = 10.22 # m3/BV
 BV_MET = 10.22  # m3/BV
@@ -203,7 +204,7 @@ print(x)
 HLR = 17/60 # m/min
 EBCT = 3 # min
 Media_Depth = HLR*EBCT # m
-Q = 900/264.172 # m3/min
+Q = 900/264.172/5 # m3/min, per column, of which there are 5
 Area = Q/HLR # m
 Diameter = m.sqrt(4/m.pi*Area)
 Media_Vol = Area*Media_Depth

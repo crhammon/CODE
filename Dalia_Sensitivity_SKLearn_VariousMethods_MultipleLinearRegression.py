@@ -229,8 +229,8 @@ for i in range(0,np.size(pH_Range)):
 
 	print(x)
 	
-	sheet.cell(row=i+2, column=2).value = Cost_per_year_E33                        # DALIA Make sure it is correct adsorbent
-	sheet.cell(row=i+2, column=3).value = Cost_per_year_E33_c                      # DALIA Make sure it is correct adsorbent
+	sheet.cell(row=i+2, column=2).value = Cost_per_year_GFH                       # DALIA Make sure it is correct adsorbent
+	sheet.cell(row=i+2, column=3).value = Cost_per_year_GFH_c                      # DALIA Make sure it is correct adsorbent
 
 	wb.save(filepath)
 
