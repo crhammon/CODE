@@ -7,6 +7,7 @@ import statsmodels
 from regression_results import error_stats
 from prettytable import PrettyTable
 
+
 #---------------------------------------------------------------
 ## Nguyen DATA
 #---------------------------------------------------------------
@@ -29,7 +30,7 @@ X = Xp.T
 ## Design Criteria!
 #---------------------------------------------------------------
 
-pH_m = 7.7 # S.U.
+pH_m = 7 # S.U.
 Si_m = 17 # mg/L as SiO2
 V_m = 3.4 # ug/L as V
 P_m = 80*30.974/(4*15.999+30.974) # ug/L as P (coversion shown here)
@@ -37,7 +38,7 @@ As_m = 23 # ug/L as As
 
 ## Conservative Values, no extrapolation here.
 
-pH_m_c = 7.7 # S.U.
+pH_m_c = 7 # S.U.
 Si_m_c = 33 # mg/L as SiO2
 V_m_c = 21 # ug/L as V
 P_m_c = 55 # ug/L as P (coversion shown here)
@@ -169,6 +170,9 @@ Time_to_repl_MET_c = np.around(BV10_m_MET_c/BV_Treated_MET,2)
 Cost_per_year_GFH = np.around(BV_GFH*Cost_GFH/Time_to_repl_GFH) # $/year
 Cost_per_year_GFH_c = np.around(BV_GFH*Cost_GFH/Time_to_repl_GFH_c) # $/year
 
+Cost_per_year_GFH_total = np.around(BV_GFH*Cost_GFH/Time_to_repl_GFH/.8) # $/year
+Cost_per_year_GFH_c_total = np.around(BV_GFH*Cost_GFH/Time_to_repl_GFH_c/.8) # $/year
+
 Cost_per_year_E33 = np.around(BV_E33*Cost_E33/Time_to_repl_E33) # $/year
 Cost_per_year_E33_c = np.around(BV_E33*Cost_E33/Time_to_repl_E33_c) # $/year
 
@@ -177,6 +181,9 @@ Cost_per_year_E33_c_total = np.around(BV_E33*Cost_E33/Time_to_repl_E33_c/.8) # $
 
 Cost_per_year_MET = np.around(BV_MET*Cost_MET/Time_to_repl_MET) # $/year
 Cost_per_year_MET_c = np.around(BV_MET*Cost_MET/Time_to_repl_MET_c) # $/year
+
+Cost_per_year_MET_total = np.around(BV_MET*Cost_MET/Time_to_repl_MET/.8) # $/year
+Cost_per_year_MET_c_total = np.around(BV_MET*Cost_MET/Time_to_repl_MET_c/.8) # $/year
 
 x = PrettyTable()
 
@@ -191,8 +198,7 @@ x.add_row(["Time to replacement, extrapolated (months)", Time_to_repl_GFH, Time_
 x.add_row(["Time to replacement, conservative (months)", Time_to_repl_GFH_c, Time_to_repl_E33_c, Time_to_repl_MET_c])
 x.add_row(["Media Cost, extrapolated ($/year)", Cost_per_year_GFH, Cost_per_year_E33, Cost_per_year_MET])
 x.add_row(["Media Cost, conservative ($/year)", Cost_per_year_GFH_c, Cost_per_year_E33_c, Cost_per_year_MET_c])
-x.add_row(["Total Cost, extrapolated ($/year)", "n/a" , Cost_per_year_E33_total, "n/a"])
-x.add_row(["Total Cost, conservative ($/year)","n/a" , Cost_per_year_E33_c_total,"n/a" ])
+
 
 print(x)
 
@@ -204,7 +210,7 @@ print(x)
 HLR = 17/60 # m/min
 EBCT = 3 # min
 Media_Depth = HLR*EBCT # m
-Q = 900/264.172/5 # m3/min, per column, of which there are 5
+Q = 900/264.172/4# m3/min, per column, of which there are 4
 Area = Q/HLR # m
 Diameter = m.sqrt(4/m.pi*Area)
 Media_Vol = Area*Media_Depth
