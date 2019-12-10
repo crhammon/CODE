@@ -80,6 +80,63 @@ BV10_m = np.around(np.exp(lm.intercept_ + Coef[0]*pH_m +
 BV10_m_c = np.around(np.exp(lm.intercept_ + Coef[0]*pH_m_c +
 	Coef[1]*Si_m_c + Coef[2]*V_m_c + Coef[3]*P_m_c+Coef[4]*As_m_c))
 
+# Prediction Interval calcuations
+
+# modified Xp for PI calculations
+ones = np.array([1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1])
+Xp_ones = np.array([ones,pH,Si,V,P,As])
+Xp_ones_T = Xp_ones.T
+
+
+D = np.array([1, pH_m, Si_m, V_m, P_m, As_m])
+D_c = np.array([1, pH_m_c, Si_m_c, V_m_c, P_m_c, As_m_c])
+D_T = np.array([[1], [pH_m], [Si_m], [V_m], [P_m], [As_m]])
+D_T_c = np.array([[1], [pH_m_c], [Si_m_c], [V_m_c], [P_m_c], [As_m_c]])
+B_column = np.array([[lm.intercept_], [Coef[0]], [Coef[1]], [Coef[2]], 
+	[Coef[3]], [Coef[4]]])
+B_row = B_column.reshape(1, -1)
+GFH_column = BV10_GFH.reshape(-1, 1)
+
+# this is the product of x0 and estimators
+xB = np.matmul(D, B_column)
+xB_c = np.matmul(D_c, B_column)
+
+# non conservative
+omega_GFH_pt1 = np.matmul(BV10_GFH, GFH_column)
+omega_GFH_pt2 = np.matmul(Xp_ones, GFH_column)
+omega_GFH_pt3 = np.matmul(B_row, omega_GFH_pt2)
+omega_GFH_f1 = omega_GFH_pt1 - omega_GFH_pt3
+omega_GFH_f2 = omega_GFH_f1/21
+
+S_pt1 = np.matmul(Xp_ones, Xp_ones_T)
+S_pt2 = np.matmul(np.linalg.inv(S_pt1), D_T)
+S_pt3 = np.matmul(D, S_pt2)
+S_final = 1 + S_pt3
+
+B_low_GFH = np.exp(xB - 2.080*np.sqrt(omega_GFH_f2*S_final))
+B_high_GFH = np.exp(xB + 2.080*np.sqrt(omega_GFH_f2*S_final))
+
+print("The lower bound for non-conservative PI is equal to:", 
+	B_low_GFH)
+print("The upper bound for non-conservative PI is equal to:", 
+	B_high_GFH)
+
+# conservative
+
+S_pt2_c = np.matmul(np.linalg.inv(S_pt1), D_T_c)
+S_pt3_c = np.matmul(D_c, S_pt2_c)
+S_final_c = 1 + S_pt3_c
+
+B_low_GFH_c = np.exp(xB - 2.080*np.sqrt(omega_GFH_f2*S_final_c))
+B_high_GFH_c = np.exp(xB + 2.080*np.sqrt(omega_GFH_f2*S_final_c))
+
+print("The lower bound for non-conservative PI is equal to:", 
+	B_low_GFH_c)
+print("The upper bound for non-conservative PI is equal to:", 
+	B_high_GFH_c)
+
+
+
 
 #---------------------------------------------------------------
 ## E33
@@ -143,6 +200,15 @@ BV_Treated_MET = Q/BV_MET # BV/year
 Time_to_repl_GFH = np.around(BV10_m/BV_Treated_GFH,2) # Time to
 # replacement for media, years
 Time_to_repl_GFH_c = np.around(BV10_m_c/BV_Treated_GFH,2)
+
+Time_to_repl_GFH_low = np.around(B_low_GFH/BV_Treated_GFH,2) # Time to
+# replacement for media, years
+Time_to_repl_GFH_high = np.around(B_high_GFH/BV_Treated_GFH,2) # Time to
+# replacement for media, years
+Time_to_repl_GFH_c = np.around(B_low_GFH_c/BV_Treated_GFH,2)
+Time_to_repl_GFH_c = np.around(B_high_GFH_c/BV_Treated_GFH,2)
+
+
 
 Time_to_repl_E33 = np.around(BV10_m_E33/BV_Treated_E33,2) # Time
 # to replacement for media, years
