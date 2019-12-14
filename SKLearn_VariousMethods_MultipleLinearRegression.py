@@ -127,16 +127,13 @@ S_pt2_c = np.matmul(np.linalg.inv(S_pt1), D_T_c)
 S_pt3_c = np.matmul(D_c, S_pt2_c)
 S_final_c = 1 + S_pt3_c
 
-B_low_GFH_c = np.exp(xB - 2.080*np.sqrt(omega_GFH_f2*S_final_c))
-B_high_GFH_c = np.exp(xB + 2.080*np.sqrt(omega_GFH_f2*S_final_c))
+B_low_GFH_c = np.exp(xB_c - 2.080*np.sqrt(omega_GFH_f2*S_final_c))
+B_high_GFH_c = np.exp(xB_c + 2.080*np.sqrt(omega_GFH_f2*S_final_c))
 
 print("The lower bound for non-conservative PI is equal to:", 
 	B_low_GFH_c)
 print("The upper bound for non-conservative PI is equal to:", 
 	B_high_GFH_c)
-
-
-
 
 #---------------------------------------------------------------
 ## E33
@@ -205,10 +202,23 @@ Time_to_repl_GFH_low = np.around(B_low_GFH/BV_Treated_GFH,2) # Time to
 # replacement for media, years
 Time_to_repl_GFH_high = np.around(B_high_GFH/BV_Treated_GFH,2) # Time to
 # replacement for media, years
-Time_to_repl_GFH_c = np.around(B_low_GFH_c/BV_Treated_GFH,2)
-Time_to_repl_GFH_c = np.around(B_high_GFH_c/BV_Treated_GFH,2)
 
+Time_to_repl_GFH_c_low = np.around(B_low_GFH_c/BV_Treated_GFH,2)
+Time_to_repl_GFH_c_high = np.around(B_high_GFH_c/BV_Treated_GFH,2)
 
+Cost_per_year_GFH = np.around(BV_GFH*Cost_GFH/Time_to_repl_GFH) 
+# $/year
+Cost_per_year_GFH_c = np.around(BV_GFH*Cost_GFH/Time_to_repl_GFH_c) 
+# $/year
+
+Cost_per_year_GFH_low = np.around(BV_GFH*Cost_GFH/Time_to_repl_GFH_high) 
+# $/year
+Cost_per_year_GFH_high = np.around(BV_GFH*Cost_GFH/Time_to_repl_GFH_low) 
+# $/year
+Cost_per_year_GFH_c_low = np.around(BV_GFH*Cost_GFH/Time_to_repl_GFH_c_high) 
+# $/year
+Cost_per_year_GFH_c_high = np.around(BV_GFH*Cost_GFH/Time_to_repl_GFH_c_low) 
+# $/year
 
 Time_to_repl_E33 = np.around(BV10_m_E33/BV_Treated_E33,2) # Time
 # to replacement for media, years
@@ -217,18 +227,6 @@ Time_to_repl_E33_c = np.around(BV10_m_E33_c/BV_Treated_E33,2)
 Time_to_repl_MET = np.around(BV10_m_MET/BV_Treated_MET,2) # Time 
 # to replacement for media, years
 Time_to_repl_MET_c = np.around(BV10_m_MET_c/BV_Treated_MET,2)
-
-Cost_per_year_GFH = np.around(BV_GFH*Cost_GFH/Time_to_repl_GFH) 
-# $/year
-Cost_per_year_GFH_c = np.around(BV_GFH*Cost_GFH/Time_to_repl_GFH_c) 
-# $/year
-
-Cost_per_year_GFH_total = np.around(BV_GFH*Cost_GFH/Time_to_repl_GFH
-		/.8) 
-# $/year
-Cost_per_year_GFH_c_total = np.around(BV_GFH*Cost_GFH/Time_to_repl_GFH_c
-		/.8) 
-# $/year
 
 Cost_per_year_E33 = np.around(BV_E33*Cost_E33/Time_to_repl_E33) 
 # $/year
@@ -256,19 +254,57 @@ x.field_names = ["Parameter", "GFH", "E33", "MetSorb"]
 
 x.add_row(["R2", r2_GFH, r2_E33, r2_MET])
 x.add_row(["MAE", MAE_GFH, MAE_E33, MAE_MET])
-x.add_row(["BV to breakthrough, extrapolated", BV10_m, BV10_m_E33,
+x.add_row(["BV to breakthrough, extrapolated", BV10_m, 
+	BV10_m_E33,
 	BV10_m_MET])
-x.add_row(["BV to breakthrough, conservative", BV10_m_c, BV10_m_E33_c, 
+x.add_row(["BV to breakthrough, extrapolated, low", np.around(B_low_GFH), 
+	"-", "-"])
+x.add_row(["BV to breakthrough, extrapolated, high", np.around(B_high_GFH), 
+	"-", "-"])
+x.add_row(["BV to breakthrough, conservative", BV10_m_c, 
+	BV10_m_E33_c, 
 	BV10_m_MET_c])
+x.add_row(["BV to breakthrough, conservative, low", np.around(B_low_GFH_c), 
+	"-", "-"])
+x.add_row(["BV to breakthrough, conservative, high", np.around(B_high_GFH_c), 
+	"-", "-"])
 x.add_row(["Unit Cost ($/m3)", Cost_GFH, Cost_E33, Cost_MET])
-x.add_row(["Time to replacement, extrapolated (months)", Time_to_repl_GFH, 
-	Time_to_repl_E33, Time_to_repl_MET])
-x.add_row(["Time to replacement, conservative (months)", Time_to_repl_GFH_c, 
-	Time_to_repl_E33_c, Time_to_repl_MET_c])
-x.add_row(["Media Cost, extrapolated ($/year)", Cost_per_year_GFH, 
+x.add_row(["Time to replacement, extrapolated (days)", 
+	np.around(365*Time_to_repl_GFH), 
+	np.around(365*Time_to_repl_E33), np.around(365*Time_to_repl_MET)])
+x.add_row(["Time to replacement, extrapolated, low (days)", 
+	np.around(365*Time_to_repl_GFH_low), 
+	"-", "-"])
+x.add_row(["Time to replacement, extrapolated, high (days)", 
+	np.around(365*Time_to_repl_GFH_high), 
+	"-", "-"])
+x.add_row(["Time to replacement, conservative (days)", 
+	np.around(365*Time_to_repl_GFH_c), 
+	np.around(365*Time_to_repl_E33_c), np.around(365*Time_to_repl_MET_c)])
+x.add_row(["Time to replacement, conservative, low (days)", 
+	np.around(365*Time_to_repl_GFH_c_low), 
+	"-", "-"])
+x.add_row(["Time to replacement, conservative, high (days)", 
+	np.around(365*Time_to_repl_GFH_c_high), 
+	"-", "-"])
+x.add_row(["Media Cost, extrapolated ($/year)", 
+	Cost_per_year_GFH, 
 	Cost_per_year_E33, Cost_per_year_MET])
-x.add_row(["Media Cost, conservative ($/year)", Cost_per_year_GFH_c, 
+x.add_row(["Media Cost, conservative ($/year)", 
+	Cost_per_year_GFH_c, 
 	Cost_per_year_E33_c, Cost_per_year_MET_c])
+x.add_row(["Media Cost, extrapolated, lower bound ($/year)", 
+	Cost_per_year_GFH_low, 
+	"-", "-"])
+x.add_row(["Media Cost, extrapolated, upper bound ($/year)", 
+	Cost_per_year_GFH_high, 
+	"-", "-"])
+x.add_row(["Media Cost, conservative, lower bound ($/year)", 
+	Cost_per_year_GFH_c_low, 
+	"-", "-"])
+x.add_row(["Media Cost, conservative, upper bound ($/year)", 
+	Cost_per_year_GFH_c_high, 
+	"-", "-"])
 
 
 print(x)
